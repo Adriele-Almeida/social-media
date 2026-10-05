@@ -1,0 +1,1744 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adriele Almeida | Base Operacional</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --surface2: #1a1a1a;
+    --surface3: #222222;
+    --border: #2a2a2a;
+    --cyan: #00d4ff;
+    --gold: #f0b429;
+    --green: #00e676;
+    --red: #ff4757;
+    --orange: #ff9f43;
+    --purple: #a29bfe;
+    --text: #f0f0f0;
+    --text2: #888;
+    --text3: #555;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--cyan);
+    text-transform: uppercase;
+  }
+
+  .logo span { color: var(--gold); }
+
+  .header-actions { display: flex; gap: 10px; align-items: center; }
+  .bell { position:relative; min-width:40px; justify-content:center; padding:8px 11px; }
+  .bell-badge { position:absolute; top:-6px; right:-5px; min-width:17px; height:17px; border-radius:10px; background:var(--red); color:#fff; font-size:10px; display:none; align-items:center; justify-content:center; }
+  .sidebar-menu { padding-bottom:8px; }
+  .menu-item { width:100%; padding:10px 20px; border:0; border-left:3px solid transparent; background:transparent; color:var(--text2); text-align:left; cursor:pointer; font:600 13px 'Rajdhani',sans-serif; letter-spacing:.3px; }
+  .menu-item:hover,.menu-item.active { color:var(--cyan); background:var(--surface2); border-left-color:var(--cyan); }
+  .view-title { font-family:'Orbitron',sans-serif; font-size:13px; letter-spacing:2px; color:var(--cyan); margin-bottom:12px; }
+  .activity-panel { display:none; margin:0 0 22px; border:1px solid var(--border); border-radius:8px; background:var(--surface); }
+  .activity-panel.open { display:block; }
+  .activity-item { padding:12px 15px; border-bottom:1px solid var(--border); font-size:13px; color:var(--text2); }
+
+  /* BOTÕES */
+  .btn {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 1px;
+    padding: 8px 18px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .btn-primary {
+    background: var(--cyan);
+    color: #000;
+  }
+  .btn-primary:hover { background: #00b8e0; transform: translateY(-1px); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--text2);
+    border: 1px solid var(--border);
+  }
+  .btn-ghost:hover { border-color: var(--cyan); color: var(--cyan); }
+
+  .btn-danger {
+    background: transparent;
+    color: var(--red);
+    border: 1px solid var(--red);
+    padding: 5px 12px;
+    font-size: 11px;
+  }
+  .btn-danger:hover { background: var(--red); color: #fff; }
+
+  .btn-edit {
+    background: transparent;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    padding: 5px 12px;
+    font-size: 11px;
+  }
+  .btn-edit:hover { background: var(--gold); color: #000; }
+
+  /* LAYOUT PRINCIPAL */
+  .main {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    min-height: calc(100vh - 57px);
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 20px 0;
+    position: sticky;
+    top: 57px;
+    height: calc(100vh - 57px);
+    overflow-y: auto;
+  }
+
+  .sidebar-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--text3);
+    text-transform: uppercase;
+    padding: 0 20px 12px;
+  }
+
+  .client-item {
+    padding: 12px 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.15s;
+    border-left: 3px solid transparent;
+  }
+
+  .client-item:hover { background: var(--surface2); }
+  .client-item.active {
+    background: var(--surface2);
+    border-left-color: var(--cyan);
+  }
+
+  .client-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .client-name {
+    font-size: 14px;
+    font-weight: 600;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .client-count {
+    font-size: 11px;
+    color: var(--text3);
+    background: var(--surface3);
+    padding: 2px 7px;
+    border-radius: 10px;
+  }
+
+  .sidebar-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 12px 20px;
+  }
+
+  .sidebar-all {
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.15s;
+  }
+  .sidebar-all:hover, .sidebar-all.active { color: var(--cyan); }
+  .sidebar-all.active { font-weight: 700; }
+
+  /* ÁREA PRINCIPAL */
+  .content {
+    padding: 28px;
+    overflow-y: auto;
+  }
+
+  /* RESUMO RÁPIDO */
+  .summary-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+
+  .summary-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .summary-icon {
+    font-size: 22px;
+    line-height: 1;
+  }
+
+  .summary-info { flex: 1; }
+  .summary-num {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .summary-label {
+    font-size: 11px;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 3px;
+  }
+
+  /* CALENDÁRIO */
+  .section-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--text2);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .calendar-section { margin-bottom: 32px; }
+
+  .calendar-nav {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+
+  .calendar-month {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--cyan);
+    min-width: 160px;
+    text-align: center;
+  }
+
+  .cal-nav-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    width: 30px; height: 30px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .cal-nav-btn:hover { border-color: var(--cyan); color: var(--cyan); }
+
+  .cal-view-btn {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text2);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .cal-view-btn:hover { border-color: var(--cyan); color: var(--cyan); }
+  .cal-view-btn.active { background: var(--cyan); color: #000; border-color: var(--cyan); }
+
+  /* CALENDÁRIO SEMANA/DIA */
+  .cal-week-grid {
+    display: grid;
+    grid-template-columns: 50px repeat(7,1fr);
+    gap: 2px;
+  }
+  .cal-week-grid.dia-view { grid-template-columns: 50px 1fr; }
+  .cal-time-col {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 9px;
+    color: var(--text3);
+    text-align: right;
+    padding-right: 8px;
+    line-height: 32px;
+    height: 32px;
+  }
+  .cal-week-header {
+    text-align: center;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--text3);
+    text-transform: uppercase;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .cal-week-header.today-col { color: var(--cyan); }
+  .cal-week-cell {
+    border-left: 1px solid var(--border);
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    height: 32px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+  .cal-week-cell:hover { background: var(--surface2); }
+  .cal-week-event {
+    position: absolute;
+    left: 2px; right: 2px;
+    top: 3px;
+    border-radius: 3px;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 1px 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #000;
+    z-index: 1;
+  }
+
+  /* DIA VIEW */
+  .cal-day-view-header {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--cyan);
+    margin-bottom: 12px;
+  }
+  .cal-day-event-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+  .cal-day-event-row:hover { background: var(--surface2); }
+  .cal-day-event-time {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 11px;
+    color: var(--text2);
+    min-width: 40px;
+  }
+  .cal-day-event-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .cal-day-event-title { font-size: 13px; font-weight: 600; flex: 1; }
+  .cal-day-empty { text-align:center; color:var(--text3); padding: 30px; font-size:13px; }
+
+
+
+  .cal-header {
+    text-align: center;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--text3);
+    text-transform: uppercase;
+    padding: 6px 0;
+  }
+
+  .cal-day {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    min-height: 70px;
+    padding: 6px;
+    cursor: pointer;
+    transition: border-color 0.15s;
+    position: relative;
+  }
+  .cal-day:hover { border-color: var(--cyan); }
+  .cal-day.empty { background: transparent; border-color: transparent; cursor: default; }
+  .cal-day.today { border-color: var(--cyan); }
+
+  .cal-day-num {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text2);
+    margin-bottom: 4px;
+  }
+  .cal-day.today .cal-day-num { color: var(--cyan); }
+
+  .cal-dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    margin: 1px;
+  }
+
+  .cal-dots { display: flex; flex-wrap: wrap; gap: 2px; }
+
+  /* LISTA DE POSTS */
+  .posts-section { }
+
+  .posts-filters {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .filter-group { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .filter-btn {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text2);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .filter-btn:hover { border-color: var(--cyan); color: var(--cyan); }
+  .filter-btn.active { background: var(--cyan); color: #000; border-color: var(--cyan); }
+  .filter-btn.f-publicado.active { background: var(--green); border-color: var(--green); }
+  .filter-btn.f-agendado.active { background: var(--gold); border-color: var(--gold); color: #000; }
+  .filter-btn.f-pronto.active { background: var(--purple); border-color: var(--purple); color: #000; }
+  .filter-btn.f-criar.active { background: var(--red); border-color: var(--red); color: #fff; }
+
+  /* TABELA DE POSTS */
+  .posts-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .posts-table th {
+    text-align: left;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text3);
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .posts-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+    vertical-align: middle;
+  }
+
+  .posts-table tr:hover td { background: var(--surface2); }
+
+  .post-date {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 11px;
+    color: var(--text2);
+    white-space: nowrap;
+  }
+
+  .post-client {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .post-client-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .post-title {
+    font-weight: 600;
+    color: var(--text);
+    max-width: 220px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .post-type {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 12px;
+    background: var(--surface3);
+    color: var(--text2);
+    white-space: nowrap;
+  }
+
+  .badge-status {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 12px;
+    white-space: nowrap;
+  }
+
+  /* LEGENDA WRAPPER */
+  .legenda-wrapper {
+    position: relative;
+  }
+  .legenda-wrapper textarea {
+    padding-right: 100px;
+  }
+  .btn-copy {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: var(--surface3);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--cyan);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.15s;
+  }
+  .btn-copy:hover { background: var(--cyan); color: #000; border-color: var(--cyan); }
+
+  /* CAMPO HORA */
+  #horaField input { letter-spacing: 3px; font-family: 'Orbitron', sans-serif; font-size: 16px; text-align: center; }
+
+  /* STATUS BADGES ATUALIZADOS */
+  .s-publicado  { background: rgba(0,230,118,0.12);  color: var(--green); }
+  .s-programado { background: rgba(240,180,41,0.12); color: var(--gold); }
+  .s-refinar    { background: rgba(162,155,254,0.12);color: var(--purple); }
+  .s-criar      { background: rgba(255,71,87,0.12);  color: var(--red); }
+
+
+
+  .post-link a {
+    color: var(--cyan);
+    font-size: 12px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .post-link a:hover { text-decoration: underline; }
+
+  .post-actions { display: flex; gap: 6px; }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text3);
+  }
+  .empty-state .e-icon { font-size: 40px; margin-bottom: 12px; }
+  .empty-state p { font-size: 14px; }
+
+  /* MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    width: 540px;
+    max-width: 95vw;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+  }
+
+  .modal-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: var(--cyan);
+    text-transform: uppercase;
+    margin-bottom: 22px;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group.full { grid-column: 1 / -1; }
+
+  label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text2);
+  }
+
+  input, select, textarea {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 10px 12px;
+    transition: border-color 0.15s;
+    outline: none;
+    width: 100%;
+  }
+  input:focus, select:focus, textarea:focus { border-color: var(--cyan); }
+  textarea { resize: vertical; min-height: 70px; }
+  select option { background: var(--surface2); }
+
+  .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* MODAL CLIENTE */
+  .modal-client { width: 400px; }
+
+  .color-options {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .color-opt {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+  .color-opt:hover { transform: scale(1.15); }
+  .color-opt.selected { border-color: #fff; }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    background: var(--surface);
+    border: 1px solid var(--cyan);
+    border-radius: 8px;
+    padding: 14px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--cyan);
+    z-index: 999;
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all 0.3s;
+    pointer-events: none;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+  @media (max-width: 768px) {
+
+    /* HEADER */
+    header {
+      padding: 12px 16px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .logo { font-size: 10px; letter-spacing: 2px; }
+    .header-actions {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+    .header-actions .btn {
+      justify-content: center;
+      font-size: 12px;
+      padding: 9px 10px;
+    }
+
+    /* LAYOUT */
+    .main { grid-template-columns: 1fr; }
+
+    /* SIDEBAR vira scroll horizontal de chips */
+    .sidebar {
+      position: static;
+      height: auto;
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      gap: 6px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .sidebar-title, .sidebar-divider { display: none; }
+    .sidebar-menu, #clientList { display:flex; gap:6px; flex-shrink:0; }
+    .menu-item {
+      width:auto; padding:7px 14px; border-radius:20px; border:1px solid var(--border); white-space:nowrap; flex-shrink:0;
+    }
+    .menu-item.active { border-color:var(--cyan); background:transparent; }
+    .sidebar-all {
+      padding: 7px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      font-size: 12px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .sidebar-all.active { color: var(--cyan); border-color: var(--cyan); }
+    .client-item {
+      padding: 7px 14px;
+      border-radius: 20px;
+      border-left: none;
+      border: 1px solid var(--border);
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+    .client-item.active { border-color: var(--cyan); background: transparent; }
+    .client-count { display: none; }
+
+    /* CONTEÚDO */
+    .content { padding: 16px; }
+
+    /* RESUMO: 2x2 compacto */
+    .summary-bar {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .summary-card { padding: 12px 14px; }
+    .summary-num { font-size: 26px; }
+    .summary-label { font-size: 10px; }
+
+    /* CALENDÁRIO */
+    .calendar-nav { gap: 8px; flex-wrap: wrap; }
+    .calendar-month { font-size: 12px; min-width: 120px; }
+    .cal-nav-btn { width: 34px; height: 34px; font-size: 16px; }
+    .cal-view-btn { padding: 6px 10px; font-size: 11px; }
+    .cal-day { min-height: 44px; padding: 4px; }
+    .cal-day-num { font-size: 10px; }
+
+    /* SEMANA: scroll horizontal */
+    #calendarGrid.calendar-month-grid {
+      grid-template-columns:repeat(7, minmax(0, 1fr)) !important;
+      width:100%; overflow:visible;
+    }
+    #calendarGrid.calendar-month-grid .cal-day { min-width:0; min-height:48px; }
+    #calendarGrid.calendar-week-grid {
+      grid-template-columns: repeat(7, minmax(110px, 1fr)) !important;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* FILTROS: scroll horizontal */
+    .posts-filters { flex-direction: column; align-items: flex-start; gap: 10px; }
+    .filter-group {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      gap: 6px;
+      width: 100%;
+      padding-bottom: 4px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .filter-btn { white-space: nowrap; flex-shrink: 0; }
+
+    /* TABELA → CARDS */
+    .posts-table thead { display: none; }
+    .posts-table, .posts-table tbody, .posts-table tr, .posts-table td {
+      display: block;
+      width: 100%;
+    }
+    .posts-table tr {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 10px;
+      padding: 12px 14px;
+      position: relative;
+    }
+    .posts-table tr:hover td { background: transparent; }
+    .posts-table td {
+      padding: 3px 0;
+      border-bottom: none;
+      font-size: 13px;
+    }
+    /* esconde colunas menos importantes */
+    .posts-table td:nth-child(4) { display: none; } /* tipo */
+    .post-title { max-width: 100%; white-space: normal; }
+    .post-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid var(--border);
+    }
+    .post-actions .btn { flex: 1; justify-content: center; }
+
+    /* MODAL: ocupa tela inteira vindo de baixo */
+    .modal-overlay { align-items: flex-end; }
+    .modal {
+      width: 100%;
+      max-width: 100%;
+      max-height: 92vh;
+      border-radius: 16px 16px 0 0;
+      padding: 20px 16px 30px;
+    }
+    .form-grid { grid-template-columns: 1fr; }
+    .form-group.full { grid-column: 1; }
+    input, select, textarea {
+      font-size: 16px; /* evita zoom automático no iOS */
+      padding: 12px;
+    }
+    .modal-actions { flex-direction: column-reverse; gap: 8px; }
+    .modal-actions .btn { width: 100%; justify-content: center; padding: 12px; }
+
+    /* MODAL CLIENTE */
+    .modal-client { width: 100%; }
+    .color-opt { width: 34px; height: 34px; }
+
+    /* TOAST */
+    .toast { bottom: 16px; right: 16px; left: 16px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">Adriele Almeida <span>//</span> Base Operacional</div>
+  <div class="header-actions">
+    <button class="btn btn-primary" onclick="openPostModal()">+ Post</button>
+    <button class="btn btn-ghost" onclick="openClientModal()">+ Cliente</button>
+    <button class="btn btn-ghost bell" onclick="toggleActivity()" aria-label="Atualizações">♢<span class="bell-badge" id="bellBadge"></span></button>
+    <button class="btn btn-ghost" onclick="showSettings()">Configurações</button>
+  </div>
+</header>
+
+<!-- LAYOUT -->
+<div class="main">
+
+  <!-- SIDEBAR CLIENTES -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-title">Visão geral</div>
+    <div class="sidebar-menu" id="sidebarMenu"></div>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-title">Clientes</div>
+    <div id="clientList"></div>
+  </nav>
+
+  <!-- CONTEÚDO -->
+  <main class="content">
+    <div class="activity-panel" id="activityPanel"></div>
+    <div class="view-title" id="viewTitle">Todos</div>
+
+    <!-- RESUMO -->
+    <div class="summary-bar" id="summaryBar">
+      <div class="summary-card">
+        <div class="summary-info">
+          <div class="summary-num" id="totalPosts">0</div>
+          <div class="summary-label">Total de Posts</div>
+        </div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-info">
+          <div class="summary-num" style="color:var(--green)" id="totalPublicado">0</div>
+          <div class="summary-label">Publicados</div>
+        </div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-info">
+          <div class="summary-num" style="color:var(--gold)" id="totalAgendado">0</div>
+          <div class="summary-label">Programados</div>
+        </div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-info">
+          <div class="summary-num" style="color:var(--red)" id="totalCriar">0</div>
+          <div class="summary-label">A fazer</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CALENDÁRIO -->
+    <div class="calendar-section">
+      <div class="section-title">Calendário</div>
+      <div class="calendar-nav">
+        <button class="cal-nav-btn" onclick="changeCalNav(-1)">‹</button>
+        <div class="calendar-month" id="calMonthLabel"></div>
+        <button class="cal-nav-btn" onclick="changeCalNav(1)">›</button>
+        <div style="margin-left:auto;display:flex;gap:6px;">
+          <button class="cal-view-btn active" id="vMes" onclick="setCalView('mes',this)">Mês</button>
+          <button class="cal-view-btn" id="vSemana" onclick="setCalView('semana',this)">Semana</button>
+          <button class="cal-view-btn" id="vDia" onclick="setCalView('dia',this)">Dia</button>
+        </div>
+      </div>
+      <div id="calendarGrid"></div>
+    </div>
+
+    <!-- POSTS -->
+    <div class="posts-section">
+      <div class="section-title">Postagens</div>
+      <div class="posts-filters">
+        <div class="filter-group">
+          <button class="filter-btn active" data-filter="todos" onclick="setFilter('todos', this)">Todos</button>
+          <button class="filter-btn f-publicado" data-filter="Publicado" onclick="setFilter('Publicado', this)">Publicado</button>
+          <button class="filter-btn f-agendado" data-filter="Programado" onclick="setFilter('Programado', this)">Programado</button>
+          <button class="filter-btn f-pronto" data-filter="Refinar" onclick="setFilter('Refinar', this)">Refinar</button>
+          <button class="filter-btn f-criar" data-filter="A fazer" onclick="setFilter('A fazer', this)">A fazer</button>
+          <button class="filter-btn f-pronto" data-filter="Conferir" onclick="setFilter('Conferir', this)">Conferir</button>
+        </div>
+      </div>
+
+      <table class="posts-table" id="postsTable">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Cliente</th>
+            <th>Tema</th>
+            <th>Tipo</th>
+            <th>Status</th>
+            <th>Arte no Canva</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="postsBody"></tbody>
+      </table>
+
+      <div class="empty-state" id="emptyState" style="display:none">
+        <div class="e-icon">—</div>
+        <p>Nenhum post encontrado.<br>Clique em <strong>+ Post</strong> para começar.</p>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- MODAL POST -->
+<div class="modal-overlay" id="postModal">
+  <div class="modal">
+    <div class="modal-title" id="postModalTitle">Novo Post</div>
+    <div class="form-grid">
+      <div class="form-group full">
+        <label>Tema</label>
+        <input type="text" id="pTitle">
+      </div>
+      <div class="form-group">
+        <label>Cliente</label>
+        <select id="pClient"></select>
+      </div>
+      <div class="form-group">
+        <label>Data de postagem</label>
+        <input type="date" id="pDate">
+      </div>
+      <div class="form-group">
+        <label>Tipo de post</label>
+        <select id="pType">
+          <option>Carrossel</option>
+          <option>Post</option>
+          <option>Story</option>
+          <option>Reels</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select id="pStatus" onchange="toggleHoraField(this.value)">
+          <option value="A fazer">A fazer</option>
+          <option value="Conferir">Conferir</option>
+          <option value="Refinar">Refinar</option>
+          <option value="Programado">Programado</option>
+          <option value="Publicado">Publicado</option>
+        </select>
+      </div>
+      <div class="form-group" id="horaField" style="display:none">
+        <label>Horário (programado)</label>
+        <input type="text" id="pHora" placeholder="00:00" maxlength="5" oninput="formatHora(this)">
+      </div>
+      <div class="form-group full">
+        <label>Link da arte no Canva</label>
+        <input type="url" id="pCanva">
+      </div>
+      <div class="form-group full">
+        <label>Legenda</label>
+        <div class="legenda-wrapper">
+          <textarea id="pLegenda" rows="5"></textarea>
+          <button type="button" class="btn-copy" onclick="copiarLegenda()" title="Copiar legenda">
+            ⌘ Copiar
+          </button>
+        </div>
+      </div>
+      <div class="form-group full">
+        <label>Observações</label>
+        <textarea id="pNotes" rows="3"></textarea>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closePostModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="savePost()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CLIENTE -->
+<div class="modal-overlay" id="clientModal">
+  <div class="modal modal-client">
+    <div class="modal-title">Novo Cliente</div>
+    <div class="form-grid">
+      <div class="form-group full">
+        <label>Nome</label>
+        <input type="text" id="cName">
+      </div>
+      <div class="form-group">
+        <label>Instagram</label>
+        <input type="url" id="cInsta" placeholder="https://instagram.com/perfil">
+      </div>
+      <div class="form-group">
+        <label>Nicho</label>
+        <input type="text" id="cNiche">
+      </div>
+      <div class="form-group full">
+        <label>Cor de identificação</label>
+        <div class="color-options" id="colorOptions"></div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeClientModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveClient()">Salvar cliente</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============ DADOS ============
+const COLORS = ['#00d4ff','#f0b429','#00e676','#ff4757','#a29bfe','#ff9f43','#fd79a8','#55efc4','#e17055','#74b9ff','#b8860b','#20c997','#e84393','#6f42c1','#00b4d8'];
+let selectedColor = COLORS[0];
+let calYear, calMonth;
+let activeClient = null;
+let activeFilter = 'todos';
+let activeMenu = 'Todos';
+let editingPostId = null;
+
+function getData(key) {
+  try { return JSON.parse(localStorage.getItem(key)) || []; } catch { return []; }
+}
+function setData(key, val) {
+  localStorage.setItem(key, JSON.stringify(val));
+}
+
+function getClients() { return getData('dsc_clients'); }
+function getPosts()   { return getData('dsc_posts'); }
+function saveClients(d) { setData('dsc_clients', d); }
+function savePosts(d)   { setData('dsc_posts', d); }
+function getActivity() { return getData('dsc_activity'); }
+function saveActivity(d) { setData('dsc_activity', d); }
+function logActivity(text) { const items=getActivity(); items.unshift({id:Date.now().toString(),text,at:new Date().toLocaleString('pt-BR')}); saveActivity(items); }
+
+// ============ TOAST ============
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ============ SIDEBAR ============
+function renderSidebar() {
+  const clients = getClients();
+  const posts = getPosts();
+  const list = document.getElementById('clientList');
+  list.innerHTML = '';
+
+  clients.forEach(c => {
+    const count = posts.filter(p => p.clientId === c.id).length;
+    const div = document.createElement('div');
+    div.className = 'client-item' + (activeClient === c.id ? ' active' : '');
+    div.innerHTML = `
+      <div class="client-dot" style="background:${c.color}"></div>
+      <span class="client-name">${c.name}</span>
+      <span class="client-count">${count}</span>
+    `;
+    div.onclick = () => filterByClient(c.id);
+    list.appendChild(div);
+  });
+
+  const menu = document.getElementById('sidebarMenu');
+  menu.innerHTML = ['Todos','Clientes','A fazer','Conferir','Refinar','Programado','Publicado'].map(name => `<button class="menu-item ${activeMenu===name?'active':''}" onclick="setMenu('${name}')">${name}</button>`).join('');
+}
+
+function setMenu(name) { activeMenu=name; activeClient=null; document.getElementById('viewTitle').textContent=name; render(); }
+
+function filterByClient(id) {
+  activeClient = id;
+  activeMenu = 'Todos';
+  document.getElementById('viewTitle').textContent = getClients().find(c=>c.id===id)?.name || 'Todos';
+  renderSidebar();
+  renderPosts();
+  renderSummary();
+}
+
+// ============ RESUMO ============
+function renderSummary() {
+  let posts = getPosts();
+  if (activeClient) posts = posts.filter(p => p.clientId === activeClient);
+
+  document.getElementById('totalPosts').textContent = posts.length;
+  document.getElementById('totalPublicado').textContent = posts.filter(p => p.status === 'Publicado').length;
+  document.getElementById('totalAgendado').textContent = posts.filter(p => p.status === 'Programado').length;
+  document.getElementById('totalCriar').textContent = posts.filter(p => p.status === 'A fazer').length;
+}
+
+// ============ CALENDÁRIO ============
+let calView = 'mes'; // 'mes' | 'semana' | 'dia'
+let calRefDate; // Date de referência
+
+function initCal() {
+  calRefDate = new Date();
+  calYear = calRefDate.getFullYear();
+  calMonth = calRefDate.getMonth();
+}
+
+function setCalView(v, el) {
+  calView = v;
+  document.querySelectorAll('.cal-view-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  renderCalendar();
+}
+
+function changeCalNav(d) {
+  if (calView === 'mes') {
+    calMonth += d;
+    if (calMonth > 11) { calMonth = 0; calYear++; }
+    if (calMonth < 0)  { calMonth = 11; calYear--; }
+    calRefDate = new Date(calYear, calMonth, 1);
+  } else if (calView === 'semana') {
+    calRefDate = new Date(calRefDate.getTime() + d * 7 * 86400000);
+    calYear = calRefDate.getFullYear(); calMonth = calRefDate.getMonth();
+  } else {
+    calRefDate = new Date(calRefDate.getTime() + d * 86400000);
+    calYear = calRefDate.getFullYear(); calMonth = calRefDate.getMonth();
+  }
+  renderCalendar();
+}
+
+// mantida compatibilidade
+function changeMonth(d) { changeCalNav(d); }
+
+function renderCalendar() {
+  if (calView === 'mes')    renderCalMes();
+  else if (calView === 'semana') renderCalSemana();
+  else renderCalDia();
+}
+
+function renderCalMes() {
+  const months = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  document.getElementById('calMonthLabel').textContent = `${months[calMonth]} ${calYear}`;
+
+  const grid = document.getElementById('calendarGrid');
+  grid.className = 'calendar-month-grid';
+  grid.innerHTML = '';
+  grid.style.display = 'grid';
+  grid.style.gridTemplateColumns = 'repeat(7,1fr)';
+  grid.style.gap = '4px';
+
+  const days = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+  days.forEach(d => {
+    const h = document.createElement('div');
+    h.className = 'cal-header';
+    h.textContent = d;
+    grid.appendChild(h);
+  });
+
+  const firstDay = new Date(calYear, calMonth, 1).getDay();
+  const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+  const today = new Date();
+  const isCurrentMonth = today.getFullYear() === calYear && today.getMonth() === calMonth;
+
+  let posts = getPosts();
+  if (activeClient) posts = posts.filter(p => p.clientId === activeClient);
+  const clients = getClients();
+
+  for (let i = 0; i < firstDay; i++) {
+    const empty = document.createElement('div');
+    empty.className = 'cal-day empty';
+    grid.appendChild(empty);
+  }
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateStr = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const dayPosts = posts.filter(p => p.date === dateStr);
+
+    const cell = document.createElement('div');
+    cell.className = 'cal-day' + (isCurrentMonth && today.getDate() === d ? ' today' : '');
+
+    const dotsHtml = dayPosts.map(p => {
+      const client = clients.find(c => c.id === p.clientId);
+      const color = client ? client.color : '#555';
+      return `<div class="cal-dot" style="background:${color}" title="${client ? client.name : ''}: ${p.title}"></div>`;
+    }).join('');
+
+    cell.innerHTML = `<div class="cal-day-num">${d}</div><div class="cal-dots">${dotsHtml}</div>`;
+    cell.onclick = () => {
+      document.getElementById('pDate').value = dateStr;
+      openPostModal();
+    };
+    grid.appendChild(cell);
+  }
+}
+
+function renderCalSemana() {
+  const today = new Date();
+  const dow = calRefDate.getDay();
+  const startOfWeek = new Date(calRefDate);
+  startOfWeek.setDate(calRefDate.getDate() - dow);
+
+  const days = [];
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(startOfWeek);
+    d.setDate(startOfWeek.getDate() + i);
+    days.push(d);
+  }
+
+  const months = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+  const s = days[0], e = days[6];
+  document.getElementById('calMonthLabel').textContent =
+    `${s.getDate()} ${months[s.getMonth()]} — ${e.getDate()} ${months[e.getMonth()]} ${e.getFullYear()}`;
+
+  let posts = getPosts();
+  if (activeClient) posts = posts.filter(p => p.clientId === activeClient);
+  const clients = getClients();
+
+  const grid = document.getElementById('calendarGrid');
+  grid.className = 'calendar-week-grid';
+  grid.innerHTML = '';
+  grid.style.display = 'grid';
+  grid.style.gridTemplateColumns = 'repeat(7, 1fr)';
+  grid.style.gap = '6px';
+
+  const dayNames = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+
+  days.forEach((d, i) => {
+    const isToday = d.toDateString() === today.toDateString();
+    const dateStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    const dayPosts = posts.filter(p => p.date === dateStr)
+      .sort((a,b) => (a.hora||'99:99').localeCompare(b.hora||'99:99'));
+
+    const col = document.createElement('div');
+    col.style.cssText = `
+      background: var(--surface);
+      border: 1px solid ${isToday ? 'var(--cyan)' : 'var(--border)'};
+      border-radius: 8px;
+      overflow: hidden;
+      min-height: 120px;
+      cursor: pointer;
+    `;
+
+    // cabeçalho do dia
+    const header = document.createElement('div');
+    header.style.cssText = `
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--border);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: ${isToday ? 'var(--cyan)' : 'var(--text2)'};
+      text-transform: uppercase;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    `;
+    header.innerHTML = `<span>${dayNames[i]}</span><span style="font-size:14px;color:${isToday ? 'var(--cyan)' : 'var(--text)'}">${d.getDate()}</span>`;
+    col.appendChild(header);
+
+    // posts do dia
+    const body = document.createElement('div');
+    body.style.cssText = 'padding: 6px; display:flex; flex-direction:column; gap:4px;';
+
+    if (dayPosts.length === 0) {
+      const empty = document.createElement('div');
+      empty.style.cssText = 'font-size:10px;color:var(--text3);padding:6px 4px;text-align:center;';
+      empty.textContent = '—';
+      body.appendChild(empty);
+    } else {
+      dayPosts.forEach(p => {
+        const client = clients.find(c => c.id === p.clientId);
+        const color = client ? client.color : '#aaa';
+        const tag = document.createElement('div');
+        tag.style.cssText = `
+          background: ${color}22;
+          border-left: 3px solid ${color};
+          border-radius: 3px;
+          padding: 4px 6px;
+          cursor: pointer;
+        `;
+        tag.innerHTML = `
+          <div style="font-size:10px;font-weight:700;color:${color};letter-spacing:0.5px;text-transform:uppercase;">${p.hora || p.type}</div>
+          <div style="font-size:11px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${p.title}">${p.title}</div>
+        `;
+        tag.onclick = (e) => { e.stopPropagation(); editPost(p.id); };
+        body.appendChild(tag);
+      });
+    }
+
+    col.appendChild(body);
+    col.onclick = () => { document.getElementById('pDate').value = dateStr; openPostModal(); };
+    grid.appendChild(col);
+  });
+}
+
+function renderCalDia() {
+  const today = new Date();
+  const d = calRefDate;
+  const months = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+  const dayNames = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
+  document.getElementById('calMonthLabel').textContent =
+    `${dayNames[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+
+  const dateStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+
+  let posts = getPosts();
+  if (activeClient) posts = posts.filter(p => p.clientId === activeClient);
+  const clients = getClients();
+  const dayPosts = posts.filter(p => p.date === dateStr);
+
+  const grid = document.getElementById('calendarGrid');
+  grid.className = 'calendar-day-grid';
+  grid.innerHTML = '';
+  grid.style.display = 'block';
+  grid.style.gridTemplateColumns = '';
+  grid.style.gap = '';
+
+  if (dayPosts.length === 0) {
+    grid.innerHTML = `<div class="cal-day-empty">Nenhum post neste dia.<br><span style="color:var(--cyan);cursor:pointer" onclick="document.getElementById('pDate').value='${dateStr}';openPostModal()">+ Adicionar post</span></div>`;
+    return;
+  }
+
+  dayPosts.sort((a,b) => (a.hora||'99:99').localeCompare(b.hora||'99:99'));
+  dayPosts.forEach(p => {
+    const client = clients.find(c => c.id === p.clientId);
+    const color = client ? client.color : '#aaa';
+    const row = document.createElement('div');
+    row.className = 'cal-day-event-row';
+    row.onclick = () => editPost(p.id);
+    row.innerHTML = `
+      <div class="cal-day-event-time">${p.hora || '—'}</div>
+      <div class="cal-day-event-dot" style="background:${color}"></div>
+      <div class="cal-day-event-title">${p.title}</div>
+      <span class="badge-status s-${p.status.toLowerCase()}" style="font-size:10px">${p.status}</span>
+    `;
+    grid.appendChild(row);
+  });
+}
+
+// ============ CALENDÁRIO — VISUALIZAÇÃO MÊS / SEMANA / DIA ============
+
+// ============ POSTS ============
+function setFilter(f, el) {
+  activeFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  renderPosts();
+}
+
+function renderPosts() {
+  let posts = getPosts();
+  const clients = getClients();
+
+  if (activeClient) posts = posts.filter(p => p.clientId === activeClient);
+  if (activeMenu !== 'Todos' && activeMenu !== 'Clientes') posts = posts.filter(p => p.status === activeMenu);
+  if (activeFilter !== 'todos') posts = posts.filter(p => p.status === activeFilter);
+
+  posts.sort((a, b) => {
+    if (!a.date && !b.date) return 0;
+    if (!a.date) return 1;
+    if (!b.date) return -1;
+    return new Date(a.date) - new Date(b.date);
+  });
+
+  const body = document.getElementById('postsBody');
+  const empty = document.getElementById('emptyState');
+  body.innerHTML = '';
+
+  if (posts.length === 0) {
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  posts.forEach(p => {
+    const client = clients.find(c => c.id === p.clientId);
+    const color = client ? client.color : '#555';
+    const clientName = client ? client.name : '—';
+
+    const statusClass = { Publicado:'s-publicado', Programado:'s-programado', Refinar:'s-refinar', 'A fazer':'s-criar', Conferir:'s-refinar' }[p.status] || '';
+    const horaLabel = p.hora ? ` ${p.hora}` : '';
+    const statusLabel = { Publicado:'Publicado', Programado:`Programado${horaLabel}`, Refinar:'Refinar', 'A fazer':'A fazer', Conferir:'Conferir' }[p.status] || p.status;
+
+    const dateDisplay = p.date ? formatDate(p.date) : '—';
+    const canvaLink = p.canva ? `<a href="${p.canva}" target="_blank">↗ Abrir</a>` : '<span style="color:var(--text3);font-size:12px">—</span>';
+
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><div class="post-date">${dateDisplay}</div></td>
+      <td>
+        <div class="post-client">
+          <div class="post-client-dot" style="background:${color}"></div>
+          <span>${clientName}</span>
+        </div>
+      </td>
+      <td>
+        <div class="post-title" title="${p.title}">${p.title}</div>
+        ${p.notes ? `<div style="font-size:11px;color:var(--text3);margin-top:2px;max-width:220px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.notes}</div>` : ''}
+      </td>
+      <td><span class="post-type">${p.type}</span></td>
+      <td><span class="badge-status ${statusClass}">${statusLabel}</span></td>
+      <td class="post-link">${canvaLink}</td>
+      <td>
+        <div class="post-actions">
+          <button class="btn btn-edit" onclick="editPost('${p.id}')">▸ Editar</button>
+          <button class="btn btn-danger" onclick="deletePost('${p.id}')">× Excluir</button>
+        </div>
+      </td>
+    `;
+    body.appendChild(tr);
+  });
+}
+
+function formatDate(str) {
+  if (!str) return '—';
+  const [, m, d] = str.split('-');
+  return `${d}/${m}`;
+}
+
+// ============ MODAL POST ============
+function openPostModal(id = null) {
+  editingPostId = id;
+  const clients = getClients();
+  const sel = document.getElementById('pClient');
+  sel.innerHTML = clients.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+
+  if (id) {
+    const posts = getPosts();
+    const p = posts.find(x => x.id === id);
+    if (p) {
+      document.getElementById('postModalTitle').textContent = 'Editar Post';
+      document.getElementById('pTitle').value = p.title;
+      document.getElementById('pClient').value = p.clientId;
+      document.getElementById('pDate').value = p.date || '';
+      document.getElementById('pType').value = p.type;
+      document.getElementById('pStatus').value = p.status;
+      document.getElementById('pHora').value = p.hora || '';
+      document.getElementById('pCanva').value = p.canva || '';
+      document.getElementById('pLegenda').value = p.legenda || '';
+      document.getElementById('pNotes').value = p.notes || '';
+      toggleHoraField(p.status);
+    }
+  } else {
+    document.getElementById('postModalTitle').textContent = 'Novo Post';
+    document.getElementById('pTitle').value = '';
+    document.getElementById('pDate').value = '';
+    document.getElementById('pType').value = 'Carrossel';
+    document.getElementById('pStatus').value = 'A fazer';
+    document.getElementById('pHora').value = '';
+    document.getElementById('pCanva').value = '';
+    document.getElementById('pLegenda').value = '';
+    document.getElementById('pNotes').value = '';
+    toggleHoraField('A fazer');
+    if (activeClient && clients.find(c => c.id === activeClient)) {
+      sel.value = activeClient;
+    }
+  }
+
+  document.getElementById('postModal').classList.add('open');
+}
+
+function closePostModal() {
+  document.getElementById('postModal').classList.remove('open');
+  editingPostId = null;
+}
+
+function editPost(id) { openPostModal(id); }
+
+function savePost() {
+  const title = document.getElementById('pTitle').value.trim();
+  if (!title) { toast('Informe o tema do post'); return; }
+
+  const status = document.getElementById('pStatus').value;
+  const posts = getPosts();
+  const post = {
+    id: editingPostId || Date.now().toString(),
+    title,
+    clientId: document.getElementById('pClient').value,
+    date: document.getElementById('pDate').value,
+    type: document.getElementById('pType').value,
+    status,
+    hora: status === 'Programado' ? document.getElementById('pHora').value.trim() : '',
+    canva: document.getElementById('pCanva').value.trim(),
+    legenda: document.getElementById('pLegenda').value.trim(),
+    notes: document.getElementById('pNotes').value.trim(),
+  };
+
+  if (editingPostId) {
+    const idx = posts.findIndex(p => p.id === editingPostId);
+    posts[idx] = post;
+    logActivity(`Postagem “${title}” atualizada`); toast('Post atualizado!');
+  } else {
+    posts.push(post);
+    logActivity(`Postagem “${title}” criada`); toast('Post adicionado!');
+  }
+
+  savePosts(posts);
+  closePostModal();
+  render();
+}
+
+function deletePost(id) {
+  if (!confirm('Excluir este post?')) return;
+  const removed = getPosts().find(p=>p.id===id); const posts = getPosts().filter(p => p.id !== id);
+  savePosts(posts);
+  logActivity(`Postagem “${removed?.title || ''}” excluída`);
+  toast('Post removido');
+  render();
+}
+
+// ============ MODAL CLIENTE ============
+function openClientModal() {
+  const opts = document.getElementById('colorOptions');
+  opts.innerHTML = COLORS.map(c => `
+    <div class="color-opt ${c === selectedColor ? 'selected' : ''}"
+      style="background:${c}"
+      onclick="selectColor('${c}', this)"
+      title="${c}"></div>
+  `).join('');
+  document.getElementById('cName').value = '';
+  document.getElementById('cInsta').value = '';
+  document.getElementById('cNiche').value = '';
+  document.getElementById('clientModal').classList.add('open');
+}
+
+function closeClientModal() {
+  document.getElementById('clientModal').classList.remove('open');
+}
+
+function selectColor(c, el) {
+  selectedColor = c;
+  document.querySelectorAll('.color-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function saveClient() {
+  const name = document.getElementById('cName').value.trim();
+  if (!name) { toast('Informe o nome do cliente'); return; }
+
+  const clients = getClients();
+  clients.push({
+    id: Date.now().toString(),
+    name,
+    instagram: document.getElementById('cInsta').value.trim(),
+    niche: document.getElementById('cNiche').value.trim(),
+    color: selectedColor
+  });
+  saveClients(clients);
+  logActivity(`Cliente “${name}” cadastrado`);
+  toast('Cliente cadastrado!');
+  closeClientModal();
+  render();
+}
+
+// ============ BACKUP ============
+function exportBackup() {
+  const data = {
+    versao: '1.0',
+    data: new Date().toISOString(),
+    clientes: getClients(),
+    posts: getPosts()
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const hoje = new Date().toLocaleDateString('pt-BR').replace(/\//g, '-');
+  a.href = url;
+  a.download = `descodificado-backup-${hoje}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('💾 Backup exportado com sucesso!');
+}
+
+function importBackup(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!data.clientes || !data.posts) throw new Error('Arquivo inválido');
+      if (!confirm(`Importar backup de ${new Date(data.data).toLocaleDateString('pt-BR')}?\n\nIsso vai substituir todos os dados atuais.`)) return;
+      saveClients(data.clientes);
+      savePosts(data.posts);
+      toast('Backup importado!');
+      render();
+    } catch {
+      toast('❌ Arquivo inválido. Use um backup gerado por este dashboard.');
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+// ============ HORA / LEGENDA ============
+function toggleHoraField(status) {
+  document.getElementById('horaField').style.display = status === 'Programado' ? 'flex' : 'none';
+}
+
+function formatHora(input) {
+  let v = input.value.replace(/\D/g, '').slice(0, 4);
+  if (v.length >= 3) v = v.slice(0,2) + ':' + v.slice(2);
+  input.value = v;
+}
+
+function copiarLegenda() {
+  const txt = document.getElementById('pLegenda').value;
+  if (!txt) { toast('Legenda vazia'); return; }
+  navigator.clipboard.writeText(txt).then(() => toast('Legenda copiada!')).catch(() => {
+    const el = document.getElementById('pLegenda');
+    el.select(); document.execCommand('copy'); toast('Legenda copiada!');
+  });
+}
+
+function toggleActivity() {
+  const panel=document.getElementById('activityPanel');
+  panel.classList.toggle('open');
+  const items=getActivity();
+  panel.innerHTML = items.length ? items.map(i=>`<div class="activity-item"><strong>${i.text}</strong><br><span>${i.at}</span></div>`).join('') : '<div class="activity-item">Nenhuma atualização manual registrada.</div>';
+  document.getElementById('bellBadge').style.display='none';
+}
+function showSettings() {
+  activeMenu='Configurações'; activeClient=null;
+  document.getElementById('viewTitle').textContent='Configurações';
+  document.getElementById('activityPanel').classList.add('open');
+  document.getElementById('activityPanel').innerHTML = `<div class="activity-item"><strong>Dados</strong><br><br><label class="btn btn-ghost" style="cursor:pointer">↑ Importar dados<input type="file" accept=".json" onchange="importBackup(event)" style="display:none"></label> <button class="btn btn-ghost" onclick="exportBackup()">↓ Exportar backup</button><br><br>O cadastro de novas usuárias será administrado por você quando a base Supabase for conectada.</div>`;
+  renderSidebar();
+}
+function updateAutomaticStatuses() {
+  const now=new Date(); let changed=false; const posts=getPosts().map(p=>{
+    if (p.status==='Programado' && p.date && p.hora && new Date(`${p.date}T${p.hora}`)<=now) { changed=true; return {...p,status:'Publicado',hora:''}; }
+    return p;
+  });
+  if(changed) savePosts(posts);
+}
+
+// ============ RENDER GERAL ============
+function render() {
+  updateAutomaticStatuses();
+  renderSidebar();
+  renderSummary();
+  renderCalendar();
+  renderPosts();
+}
+
+// ============ INIT ============
+initCal();
+render();
+setInterval(()=>{ updateAutomaticStatuses(); render(); }, 60000);
+</script>
+</body>
+</html>
