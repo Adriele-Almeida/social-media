@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Adriele Almeida | Base Operacional</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<title>Agenda Social | Adriele Almeida</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #0a0a0a;
@@ -896,6 +896,32 @@
     /* TOAST */
     .toast { bottom: 16px; right: 16px; left: 16px; text-align: center; }
   }
+
+  /* Interface do calendário do cliente */
+  :root { --bg:#f3f0ea; --surface:#fffdf9; --surface2:#f8f5f0; --surface3:#ebe6de; --border:#e1dbd2; --cyan:#1f594c; --gold:#b68b3d; --green:#39745c; --red:#a64a43; --purple:#75688b; --text:#25211e; --text2:#706a63; --text3:#9c958c; }
+  body, input, select, textarea, .btn { font-family:'DM Sans',sans-serif; }
+  header { background:rgba(255,253,249,.92); border-bottom-color:var(--border); backdrop-filter:blur(10px); }
+  .logo,.logo span,.view-title,.calendar-month { color:var(--text); font-family:'Fraunces',serif; letter-spacing:0; text-transform:none; }
+  .logo { font-size:18px; } .main { grid-template-columns:220px 1fr; } .sidebar { background:#eeebe5; border-right-color:var(--border); }
+  .menu-item,.client-item { color:var(--text2); } .menu-item:hover,.menu-item.active,.client-item.active { color:var(--text); background:#fffdf9; border-left-color:var(--cyan); }
+  .content { max-width:1440px; margin:0 auto; width:100%; padding:36px; } .summary-card,.activity-panel { background:var(--surface); border-color:var(--border); box-shadow:0 8px 22px rgba(58,48,36,.04); }
+  .section-title { display:none; } .calendar-section { margin-bottom:54px; } .calendar-nav { justify-content:center; gap:14px; margin-bottom:20px; }
+  .calendar-month { font-size:clamp(26px,4vw,46px); min-width:auto; order:2; } .cal-nav-btn { order:1; width:54px; height:54px; border-radius:50%; background:var(--surface); border-color:var(--border); color:var(--text); font-size:28px; }
+  .calendar-nav .cal-nav-btn:nth-of-type(2) { order:3; } .calendar-nav > div:last-child { position:absolute; right:36px; }
+  .cal-view-btn { border-radius:20px; color:var(--text2); border-color:var(--border); } .cal-view-btn.active { background:var(--cyan); border-color:var(--cyan); color:#fff; }
+  .calendar-month-grid { gap:10px!important; } .cal-header { color:var(--text2); font-size:13px; font-family:'DM Sans',sans-serif; letter-spacing:0; text-transform:none; padding:4px 0 10px; }
+  .cal-day { background:var(--surface); border:0; border-radius:24px; min-height:132px; padding:12px; box-shadow:0 4px 12px rgba(58,48,36,.035); } .cal-day:hover,.cal-day.today { border:0; box-shadow:0 0 0 2px var(--cyan); }
+  .cal-day-num { width:30px; height:30px; display:grid; place-items:center; font-size:16px; color:var(--text); margin-bottom:8px; } .cal-day.today .cal-day-num { background:var(--cyan); color:#fff; border-radius:50%; }
+  .cal-dots { display:grid; grid-template-columns:repeat(auto-fill,minmax(44px,1fr)); gap:6px; } .cal-post-thumb { width:100%; aspect-ratio:1; border:0; border-radius:9px; background:var(--surface3) center/cover; cursor:pointer; padding:0; }
+  .week-preview { margin-top:18px; } .week-preview-heading h2 { font:700 clamp(30px,4vw,46px)/1 'Fraunces',serif; color:var(--text); } .week-preview-heading p { color:var(--text2); font-size:18px; margin:8px 0 18px; }
+  .week-preview-grid { display:grid; grid-template-columns:repeat(7,minmax(150px,1fr)); gap:14px; overflow-x:auto; padding-bottom:6px; } .week-day-card { min-height:220px; background:var(--surface); border-radius:24px; padding:18px; box-shadow:0 4px 12px rgba(58,48,36,.035); }
+  .week-day-card h3 { font:700 24px/1.1 'Fraunces',serif; color:var(--text); margin-bottom:16px; } .week-post { display:flex; gap:10px; align-items:center; width:100%; border:0; background:transparent; color:var(--text); text-align:left; cursor:pointer; padding:0; margin-bottom:12px; font:inherit; }
+  .week-post img,.week-post-placeholder { width:68px; height:68px; border-radius:10px; object-fit:cover; background:var(--surface3); flex:0 0 auto; } .week-post span { display:block; font-size:13px; line-height:1.35; } .week-post time { color:var(--text2); font-size:12px; }
+  .post-details-modal { width:720px; padding:0; overflow:hidden; background:var(--surface); } .details-close { position:absolute; top:14px; right:14px; z-index:2; width:38px; height:38px; border:0; border-radius:50%; background:rgba(255,253,249,.92); color:var(--text); font-size:28px; cursor:pointer; }
+  .post-details-image { min-height:250px; background:var(--surface3) center/cover no-repeat; } .post-details-content { padding:26px; } .post-details-meta { color:var(--text2); font-size:13px; margin-bottom:7px; } .post-details-content h2 { font:700 28px/1.1 'Fraunces',serif; color:var(--text); }
+  .post-details-actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:20px; } .post-details-caption { white-space:pre-wrap; color:var(--text2); line-height:1.55; margin-top:18px; padding-top:18px; border-top:1px solid var(--border); }
+  @media(max-width:768px){ .content{padding:20px 16px 32px}.summary-bar,.posts-section{display:none}.calendar-nav{justify-content:space-between}.calendar-nav>div:last-child{display:none}.calendar-month{font-size:32px}.cal-nav-btn{width:48px;height:48px}.calendar-month-grid{gap:8px!important}.cal-day{min-height:90px;padding:8px;border-radius:18px}.cal-day-num{font-size:14px;width:26px;height:26px;margin-bottom:5px}.cal-dots{grid-template-columns:1fr;gap:4px}.cal-post-thumb{border-radius:7px}.week-preview-grid{display:flex;gap:12px}.week-day-card{min-width:250px}.post-details-modal{border-radius:18px 18px 0 0} }
+
 </style>
 </head>
 <body>
@@ -971,6 +997,11 @@
       </div>
       <div id="calendarGrid"></div>
     </div>
+
+    <section class="week-preview" aria-labelledby="weekPreviewTitle">
+      <div class="week-preview-heading"><h2 id="weekPreviewTitle">Semana</h2><p id="weekPreviewRange"></p></div>
+      <div class="week-preview-grid" id="weekPreviewGrid"></div>
+    </section>
 
     <!-- POSTS -->
     <div class="posts-section">
@@ -1054,8 +1085,12 @@
         <input type="text" id="pHora" placeholder="00:00" maxlength="5" oninput="formatHora(this)">
       </div>
       <div class="form-group full">
-        <label>Link da arte no Canva</label>
-        <input type="url" id="pCanva">
+        <label>Link da miniatura</label>
+        <input type="url" id="pThumb" placeholder="Link direto da miniatura">
+      </div>
+      <div class="form-group full">
+        <label>Link da imagem em alta resolução</label>
+        <input type="url" id="pImage" placeholder="Link do Drive">
       </div>
       <div class="form-group full">
         <label>Legenda</label>
@@ -1074,6 +1109,22 @@
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closePostModal()">Cancelar</button>
       <button class="btn btn-primary" onclick="savePost()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL VISUALIZAÇÃO DO POST -->
+<div class="modal-overlay" id="postDetailsModal">
+  <div class="modal post-details-modal">
+    <button class="details-close" type="button" onclick="closePostDetails()" aria-label="Fechar">×</button>
+    <div class="post-details-image" id="postDetailsImage"></div>
+    <div class="post-details-content">
+      <div class="post-details-meta" id="postDetailsMeta"></div><h2 id="postDetailsTitle"></h2>
+      <div class="post-details-actions">
+        <button type="button" class="btn btn-ghost" onclick="toggleDetailsCaption()">Ver legenda</button>
+        <a class="btn btn-primary" id="postDetailsImageLink" target="_blank" rel="noopener" hidden>Ver imagem em alta</a>
+      </div>
+      <div class="post-details-caption" id="postDetailsCaption" hidden></div>
     </div>
   </div>
 </div>
@@ -1271,8 +1322,10 @@ function renderCalMes() {
 
     const dotsHtml = dayPosts.map(p => {
       const client = clients.find(c => c.id === p.clientId);
-      const color = client ? client.color : '#555';
-      return `<div class="cal-dot" style="background:${color}" title="${client ? client.name : ''}: ${p.title}"></div>`;
+      const label = `${client ? client.name : ''}: ${p.title}`;
+      const thumbnail = p.thumbnail || p.canva || '';
+      const style = thumbnail ? ` style="background-image:url('${thumbnail.replace(/'/g, '%27')}')"` : '';
+      return `<button class="cal-post-thumb" type="button"${style} title="${label}" aria-label="Abrir ${p.title}" onclick="event.stopPropagation();openPostDetails('${p.id}')"></button>`;
     }).join('');
 
     cell.innerHTML = `<div class="cal-day-num">${d}</div><div class="cal-dots">${dotsHtml}</div>`;
@@ -1281,6 +1334,31 @@ function renderCalMes() {
       openPostModal();
     };
     grid.appendChild(cell);
+  }
+}
+
+
+function renderWeekPreview() {
+  const start = new Date(calRefDate); start.setDate(calRefDate.getDate() - calRefDate.getDay());
+  const end = new Date(start); end.setDate(start.getDate() + 6);
+  const days = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+  const months = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+  document.getElementById('weekPreviewRange').textContent = \`\${start.getDate()} a \${end.getDate()} de \${months[end.getMonth()]}\`;
+  let posts = getPosts(); if (activeClient) posts = posts.filter(p => p.clientId === activeClient);
+  const grid = document.getElementById('weekPreviewGrid'); grid.innerHTML = '';
+  for (let i = 0; i < 7; i++) {
+    const day = new Date(start); day.setDate(start.getDate() + i);
+    const dateStr = \`\${day.getFullYear()}-\${String(day.getMonth()+1).padStart(2,'0')}-\${String(day.getDate()).padStart(2,'0')}\`;
+    const dayPosts = posts.filter(p => p.date === dateStr).sort((a,b) => (a.hora||'99:99').localeCompare(b.hora||'99:99'));
+    const card = document.createElement('article'); card.className = 'week-day-card'; card.innerHTML = \`<h3>\${days[i]} \${day.getDate()}</h3>\`;
+    dayPosts.forEach(p => {
+      const thumb = p.thumbnail || p.canva || '';
+      const media = thumb ? \`<img src="\${thumb}" alt="">\` : '<div class="week-post-placeholder"></div>';
+      const button = document.createElement('button'); button.className = 'week-post'; button.type = 'button';
+      button.innerHTML = \`\${media}<span><time>\${p.hora || 'Sem horário'}</time><br>\${p.title}</span>\`;
+      button.onclick = () => openPostDetails(p.id); card.appendChild(button);
+    });
+    grid.appendChild(card);
   }
 }
 
@@ -1474,7 +1552,8 @@ function renderPosts() {
     const statusLabel = { Publicado:'Publicado', Programado:`Programado${horaLabel}`, Refinar:'Refinar', 'A fazer':'A fazer', Conferir:'Conferir' }[p.status] || p.status;
 
     const dateDisplay = p.date ? formatDate(p.date) : '—';
-    const canvaLink = p.canva ? `<a href="${p.canva}" target="_blank">↗ Abrir</a>` : '<span style="color:var(--text3);font-size:12px">—</span>';
+    const imageLink = p.imageUrl || p.canva;
+    const canvaLink = imageLink ? `<a href="${imageLink}" target="_blank">↗ Abrir</a>` : '<span style="color:var(--text3);font-size:12px">—</span>';
 
     const tr = document.createElement('tr');
     tr.innerHTML = `
@@ -1509,6 +1588,22 @@ function formatDate(str) {
   return `${d}/${m}`;
 }
 
+
+function openPostDetails(id) {
+  const p = getPosts().find(item => item.id === id); if (!p) return;
+  const client = getClients().find(c => c.id === p.clientId);
+  const thumbnail = p.thumbnail || p.canva || '';
+  document.getElementById('postDetailsImage').style.backgroundImage = thumbnail ? \`url('\${thumbnail.replace(/'/g, '%27')}')\` : '';
+  document.getElementById('postDetailsTitle').textContent = p.title;
+  document.getElementById('postDetailsMeta').textContent = [client?.name, p.date ? formatDate(p.date) : '', p.hora, p.status].filter(Boolean).join(' · ');
+  const caption = document.getElementById('postDetailsCaption'); caption.textContent = p.legenda || 'Nenhuma legenda cadastrada.'; caption.hidden = true;
+  const imageLink = document.getElementById('postDetailsImageLink');
+  if (p.imageUrl || p.canva) { imageLink.href = p.imageUrl || p.canva; imageLink.hidden = false; } else imageLink.hidden = true;
+  document.getElementById('postDetailsModal').classList.add('open');
+}
+function closePostDetails() { document.getElementById('postDetailsModal').classList.remove('open'); }
+function toggleDetailsCaption() { const caption = document.getElementById('postDetailsCaption'); caption.hidden = !caption.hidden; }
+
 // ============ MODAL POST ============
 function openPostModal(id = null) {
   editingPostId = id;
@@ -1527,7 +1622,8 @@ function openPostModal(id = null) {
       document.getElementById('pType').value = p.type;
       document.getElementById('pStatus').value = p.status;
       document.getElementById('pHora').value = p.hora || '';
-      document.getElementById('pCanva').value = p.canva || '';
+      document.getElementById('pThumb').value = p.thumbnail || p.canva || '';
+      document.getElementById('pImage').value = p.imageUrl || '';
       document.getElementById('pLegenda').value = p.legenda || '';
       document.getElementById('pNotes').value = p.notes || '';
       toggleHoraField(p.status);
@@ -1539,7 +1635,8 @@ function openPostModal(id = null) {
     document.getElementById('pType').value = 'Carrossel';
     document.getElementById('pStatus').value = 'A fazer';
     document.getElementById('pHora').value = '';
-    document.getElementById('pCanva').value = '';
+    document.getElementById('pThumb').value = '';
+    document.getElementById('pImage').value = '';
     document.getElementById('pLegenda').value = '';
     document.getElementById('pNotes').value = '';
     toggleHoraField('A fazer');
@@ -1572,7 +1669,8 @@ function savePost() {
     type: document.getElementById('pType').value,
     status,
     hora: status === 'Programado' ? document.getElementById('pHora').value.trim() : '',
-    canva: document.getElementById('pCanva').value.trim(),
+    thumbnail: document.getElementById('pThumb').value.trim(),
+    imageUrl: document.getElementById('pImage').value.trim(),
     legenda: document.getElementById('pLegenda').value.trim(),
     notes: document.getElementById('pNotes').value.trim(),
   };
@@ -1732,6 +1830,7 @@ function render() {
   renderSidebar();
   renderSummary();
   renderCalendar();
+  renderWeekPreview();
   renderPosts();
 }
 
